@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Vanilla JavaScript App</title>
+</head>
+
+<body>
+    <main>
+    <h1>Vanilla JavaScript App</h1>
+    <p>Response from api: <b id="name">...</b></p>
+    </main>
+      <form>
+        <input type="text" id="name_field" placeholder="Type your name" style="width:350px">&nbsp; 
+        <input type="button" value="Go!" class="p-userButton" onClick="sayHello(document.getElementById('name_field').value);"/>
+      </form>
+
+    <script>
+        function sayHello(text){
+            var data = {
+                Name: text
+            };
+            fetch("/api/message", {
+                method: 'POST',
+                mode: 'same-origin', 
+                cache: 'no-cache', 
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'responseType': 'text'
+                },
+                redirect: 'follow', // manual, *follow, error
+                referrerPolicy: 'no-referrer', // no-referrer, *client
+                body: JSON.stringify(data) //treść wysyłana
+            })
+            .then(response => response.text())
+            .then(result => {
+              document.querySelector('#name').textContent = result;
+            })
+            .catch((error) => {
+              console.log('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
